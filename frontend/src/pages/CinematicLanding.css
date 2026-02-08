@@ -1,0 +1,694 @@
+/* ==========================================
+   CINEMATIC LANDING PAGE - ULTRA PREMIUM CSS
+   ========================================== */
+
+/* Base Reset & Smooth Scrolling */
+.cinematic-landing {
+    min-height: 100vh;
+    background: #030014;
+    color: white;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+/* ==========================================
+   ANIMATED GRADIENT MESH BACKGROUND
+   ========================================== */
+.bg-gradient-mesh {
+    background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.3), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 50%, rgba(99, 102, 241, 0.15), transparent),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(139, 92, 246, 0.1), transparent),
+        linear-gradient(180deg, #030014 0%, #0a0a1a 50%, #030014 100%);
+    animation: meshMove 20s ease-in-out infinite;
+}
+
+@keyframes meshMove {
+
+    0%,
+    100% {
+        background-position: 0% 50%, 100% 50%, 0% 100%, 0% 0%;
+    }
+
+    25% {
+        background-position: 50% 0%, 50% 100%, 100% 50%, 0% 0%;
+    }
+
+    50% {
+        background-position: 100% 50%, 0% 50%, 100% 0%, 0% 0%;
+    }
+
+    75% {
+        background-position: 50% 100%, 50% 0%, 0% 50%, 0% 0%;
+    }
+}
+
+/* ==========================================
+   NOISE TEXTURE OVERLAY
+   ========================================== */
+.noise-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+}
+
+/* ==========================================
+   GLASS NAVIGATION
+   ========================================== */
+.nav-glass {
+    background: rgba(10, 10, 26, 0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-link {
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #8b5cf6, #6366f1);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* ==========================================
+   LOGO GRADIENT
+   ========================================== */
+.logo-gradient {
+    background: linear-gradient(135deg, #a78bfa 0%, #818cf8 50%, #6366f1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==========================================
+   HERO TEXT GRADIENT
+   ========================================== */
+.text-gradient-hero {
+    background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 25%, #8b5cf6 50%, #7c3aed 75%, #6d28d9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 8s ease-in-out infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes gradientShift {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* ==========================================
+   PRIMARY CTA BUTTON
+   ========================================== */
+.cta-primary {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%);
+    box-shadow:
+        0 4px 15px rgba(139, 92, 246, 0.4),
+        0 0 0 1px rgba(139, 92, 246, 0.2);
+    transition: all 0.3s ease;
+}
+
+.cta-primary:hover {
+    box-shadow:
+        0 8px 30px rgba(139, 92, 246, 0.5),
+        0 0 60px rgba(139, 92, 246, 0.3),
+        0 0 0 1px rgba(139, 92, 246, 0.4);
+}
+
+.cta-glow {
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, #a78bfa, #6366f1, #8b5cf6, #a78bfa);
+    background-size: 400% 400%;
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    filter: blur(15px);
+    transition: opacity 0.3s ease;
+    animation: glowRotate 3s linear infinite;
+}
+
+.cta-primary:hover .cta-glow {
+    opacity: 1;
+}
+
+@keyframes glowRotate {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ==========================================
+   MAGNETIC BUTTON EFFECT
+   ========================================== */
+.magnetic-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.magnetic-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease;
+}
+
+.magnetic-btn:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* ==========================================
+   SCROLL DOT ANIMATION
+   ========================================== */
+@keyframes scrollDot {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: translateY(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(8px);
+    }
+}
+
+.animate-scroll-dot {
+    animation: scrollDot 2s ease-in-out infinite;
+}
+
+/* ==========================================
+   FEATURE CARDS - 3D TILT EFFECT
+   ========================================== */
+.feature-card {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+/* Stats Badge Pulse Animation */
+.feature-card .absolute.top-6 {
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 4px 25px rgba(139, 92, 246, 0.5);
+    }
+}
+
+/* CI/CD Integration Card Hover */
+.cicd-integration-card {
+    transition: all 0.3s ease;
+}
+
+.cicd-integration-card:hover {
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+}
+
+/* Advanced Capabilities Section */
+.advanced-capabilities-btn {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.15));
+    transition: all 0.3s ease;
+}
+
+.advanced-capabilities-btn:hover {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(99, 102, 241, 0.25));
+    box-shadow: 0 10px 40px rgba(139, 92, 246, 0.2);
+}
+
+/* Tagline Styling */
+.feature-tagline {
+    background: linear-gradient(90deg, rgba(167, 139, 250, 0.1), transparent);
+    border-left: 2px solid rgba(167, 139, 250, 0.5);
+    padding-left: 0.75rem;
+}
+
+/* Special Glow Effect Card */
+.feature-card-glow {
+    position: relative;
+}
+
+.feature-card-glow::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(20, 184, 166, 0.2), rgba(16, 185, 129, 0.4));
+    z-index: -1;
+    opacity: 0.5;
+    filter: blur(8px);
+    animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        filter: blur(8px);
+    }
+
+    50% {
+        opacity: 0.7;
+        filter: blur(12px);
+    }
+}
+
+/* Animate pulse slow for internal glow */
+.animate-pulse-slow {
+    animation: pulseSlow 4s ease-in-out infinite;
+}
+
+@keyframes pulseSlow {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* ==========================================
+   PRICING CARDS
+   ========================================== */
+.pricing-card {
+    transform-style: preserve-3d;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.pricing-card::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), transparent, rgba(99, 102, 241, 0.3));
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+}
+
+.pricing-card:hover::after {
+    opacity: 1;
+}
+
+/* ==========================================
+   DEMO SECTION STYLING
+   ========================================== */
+.demo-terminal,
+.demo-browser {
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.demo-terminal:hover,
+.demo-browser:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 35px 60px -12px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(139, 92, 246, 0.2),
+        0 0 40px rgba(139, 92, 246, 0.1);
+}
+
+/* ==========================================
+   SECTION DIVIDERS
+   ========================================== */
+.scroll-section {
+    position: relative;
+}
+
+.scroll-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+}
+
+/* ==========================================
+   FLOATING ANIMATION UTILITIES
+   ========================================== */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* ==========================================
+   GLOW EFFECTS
+   ========================================== */
+.glow-violet {
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+}
+
+.glow-indigo {
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
+}
+
+/* ==========================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================== */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem !important;
+        line-height: 1.2;
+    }
+
+    .hero-subtitle {
+        font-size: 1.125rem !important;
+    }
+
+    .nav-glass .hidden {
+        display: none;
+    }
+
+    .pricing-card {
+        margin-bottom: 1rem;
+    }
+
+    .scroll-section {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem !important;
+    }
+
+    .cta-primary,
+    .cta-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ==========================================
+   CURSOR GLOW EFFECT (Optional Enhancement)
+   ========================================== */
+.cursor-glow {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+}
+
+/* ==========================================
+   GLASSMORPHISM UTILITIES
+   ========================================== */
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dark {
+    background: rgba(10, 10, 26, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ==========================================
+   ANIMATED BORDER GRADIENT
+   ========================================== */
+.border-gradient {
+    position: relative;
+}
+
+.border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1, #4f46e5);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+/* ==========================================
+   PULSE ANIMATIONS
+   ========================================== */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse-slow {
+    animation: pulse 3s ease-in-out infinite;
+}
+
+/* ==========================================
+   TEXT REVEAL ANIMATION
+   ========================================== */
+@keyframes revealText {
+    0% {
+        clip-path: inset(0 100% 0 0);
+    }
+
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+.text-reveal {
+    animation: revealText 1s ease-out forwards;
+}
+
+/* ==========================================
+   STAGGERED FADE IN
+   ========================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in-up-delay-1 {
+    animation-delay: 0.1s;
+}
+
+.fade-in-up-delay-2 {
+    animation-delay: 0.2s;
+}
+
+.fade-in-up-delay-3 {
+    animation-delay: 0.3s;
+}
+
+.fade-in-up-delay-4 {
+    animation-delay: 0.4s;
+}
+
+.fade-in-up-delay-5 {
+    animation-delay: 0.5s;
+}
+
+/* ==========================================
+   SHIMMER EFFECT
+   ========================================== */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* ==========================================
+   INFINITE SCROLL MARQUEE (for logos)
+   ========================================== */
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    animation: marquee 30s linear infinite;
+}
+
+/* ==========================================
+   PARTICLE GLOW
+   ========================================== */
+.particle-glow {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #a78bfa;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #a78bfa, 0 0 20px #a78bfa, 0 0 30px #a78bfa;
+}
+
+/* ==========================================
+   CUSTOM SCROLLBAR
+   ========================================== */
+.cinematic-landing::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cinematic-landing::-webkit-scrollbar-track {
+    background: #0a0a1a;
+}
+
+.cinematic-landing::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #8b5cf6, #6366f1);
+    border-radius: 4px;
+}
+
+.cinematic-landing::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #a78bfa, #818cf8);
+}
+
+/* ==========================================
+   SELECTION STYLING
+   ========================================== */
+.cinematic-landing ::selection {
+    background: rgba(139, 92, 246, 0.4);
+    color: white;
+}
+
+/* ==========================================
+   LOADING ANIMATION
+   ========================================== */
+@keyframes loadingPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+    }
+}
+
+.loading-dot {
+    animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+.loading-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
