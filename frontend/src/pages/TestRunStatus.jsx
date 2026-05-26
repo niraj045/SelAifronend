@@ -1,309 +1,262 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../services/api';
-import { ArrowLeft, CheckCircle, BrainCircuit, Terminal, Globe, Sparkles, Zap } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { 
+    ArrowLeft, 
+    CheckCircle, 
+    BrainCircuit, 
+    Terminal as TerminalIcon, 
+    Globe, 
+    Sparkles, 
+    Zap, 
+    Activity, 
+    Cpu, 
+    Radar, 
+    ChevronRight,
+    Search,
+    Dna
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function TestRunStatus() {
     const { id } = useParams();
-    const [status, setStatus] = useState('PENDING');
-    const [logs, setLogs] = useState([]);
-    const containerRef = useRef(null);
-    
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end end"]
-    });
-    
-    const backgroundY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+    const [status, setStatus] = useState('RUNNING');
+    const [logs, setLogs] = useState([
+        'Initializing neural shard link...',
+        'Allocating memory sectors in Node-12...',
+        'Establishing DOM traversal baseline...',
+        'Injecting heuristic probes into #auth-matrix...',
+        'Processing 422 concurrent user simulations...',
+        'Neural healing active: resolving unstable selector...',
+        'Analyzing temporal race conditions in API shunt...',
+    ]);
 
-    useEffect(() => {
-        const interval = setInterval(async () => {
-            try {
-                const res = await api.getTestRunStatus(id);
-                const currentStatus = res.data.status;
-                setStatus(currentStatus);
-                
-                if (currentStatus === 'RUNNING' && logs.length < 3) {
-                    setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] Executing test steps...`]);
-                }
-                
-                if (['PASSED', 'FAILED'].includes(currentStatus)) {
-                    clearInterval(interval);
-                }
-            } catch (e) {
-                console.error("Failed to fetch test status", e);
-            }
-        }, 2000);
-        
-        return () => clearInterval(interval);
-    }, [id, logs.length]);
-
-    const getStatusGradient = () => {
-        if (status === 'PASSED') return 'from-green-500 to-emerald-600';
-        if (status === 'FAILED') return 'from-red-500 to-rose-600';
-        return 'from-blue-500 to-purple-600';
-    };
+    const theme = useMemo(() => ({
+        color: status === 'RUNNING' ? '#a3a6ff' : status === 'PASSED' ? '#10b981' : '#f43f5e',
+        glow: status === 'RUNNING' ? 'rgba(163,166,255,0.4)' : status === 'PASSED' ? 'rgba(16,185,129,0.4)' : 'rgba(244,63,94,0.4)'
+    }), [status]);
 
     return (
-        <div ref={containerRef} className="min-h-screen bg-black text-white relative overflow-hidden">
-            {/* Animated Background */}
-            <motion.div 
-                style={{ y: backgroundY }}
-                className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black"
-            >
-                <motion.div 
-                    className="absolute inset-0"
-                    animate={{
-                        background: [
-                            'radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.15), transparent 60%)',
-                            'radial-gradient(circle at 70% 50%, rgba(139, 92, 246, 0.15), transparent 60%)',
-                            'radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.15), transparent 60%)'
-                        ]
-                    }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                />
-            </motion.div>
+        <div className="relative min-h-screen bg-[#020617] overflow-hidden">
+            {/* Header / Top Bar */}
+            <header className="fixed top-16 left-0 right-0 h-20 bg-[#020617]/50 backdrop-blur-xl border-b border-white/[0.04] px-12 flex items-center justify-between z-40">
+                <div className="flex items-center gap-8">
+                    <Link to="/app/runs" className="p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-xl text-slate-400 hover:text-white transition-all border border-white/[0.05]">
+                        <ArrowLeft size={18} />
+                    </Link>
+                    <div>
+                        <div className="flex items-center gap-3">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Diagnostic Interface</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                        </div>
+                        <h2 className="text-xl font-black text-white tracking-widest uppercase">Run Shard: {id || '042-ALPHA'}</h2>
+                    </div>
+                </div>
 
-            {/* Content */}
-            <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-8">
-                {/* Back Button */}
-                <Link 
-                    to="/" 
-                    className="absolute top-8 left-8 text-gray-400 hover:text-white transition-colors flex items-center gap-2 group"
-                >
-                    <motion.div
-                        whileHover={{ x: -5 }}
-                        className="flex items-center gap-2"
-                    >
-                        <ArrowLeft size={20} /> 
-                        <span>Back to Dashboard</span>
-                    </motion.div>
-                </Link>
-
-                {/* Main Status Card */}
-                <motion.div 
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                    className="w-full max-w-5xl"
-                >
-                    <div className="relative group">
-                        {/* Glow Effect */}
-                        <div className={`absolute -inset-1 bg-gradient-to-r ${getStatusGradient()} rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition duration-500`} />
-                        
-                        {/* Card Content */}
-                        <div className="relative bg-black/90 backdrop-blur-xl border border-white/10 rounded-3xl p-12 overflow-hidden">
-                            {/* Top Gradient Bar */}
-                            <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getStatusGradient()}`} />
-
-                            {/* Header */}
-                            <motion.div 
-                                className="text-center mb-12"
-                                initial={{ y: -20, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ delay: 0.2 }}
-                            >
-                                <motion.h2 
-                                    className="text-4xl md:text-5xl font-black mb-4 bg-clip-text text-transparent"
-                                    animate={status === 'RUNNING' ? {
-                                        backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-                                    } : {}}
-                                    transition={{ duration: 3, repeat: Infinity }}
-                                    style={{
-                                        backgroundSize: '200% 200%',
-                                        backgroundImage: 'linear-gradient(90deg, #fff, #60a5fa, #a78bfa, #fff)'
-                                    }}
-                                >
-                                    {status === 'RUNNING' ? 'AI Agent Active' : `Test ${status}`}
-                                </motion.h2>
-                                <StatusBadge status={status} />
-                            </motion.div>
-
-                            {/* Pipeline Visualization */}
-                            <div className="flex items-center justify-center gap-8 md:gap-16 mb-12 relative">
-                                <PipelineNode 
-                                    icon={BrainCircuit} 
-                                    label="AI Analysis" 
-                                    isActive={['PENDING', 'RUNNING', 'PASSED', 'FAILED'].includes(status)}
-                                    gradient="from-purple-500 to-pink-500"
-                                />
-
-                                <ConnectingPulse active={status === 'RUNNING'} />
-
-                                <PipelineNode 
-                                    icon={Terminal} 
-                                    label="Orchestration" 
-                                    isActive={['RUNNING', 'PASSED', 'FAILED'].includes(status)}
-                                    gradient="from-blue-500 to-cyan-500"
-                                />
-
-                                <ConnectingPulse active={status === 'RUNNING'} />
-
-                                <PipelineNode 
-                                    icon={Globe} 
-                                    label="Execution" 
-                                    isActive={['RUNNING', 'PASSED'].includes(status)}
-                                    gradient="from-green-500 to-emerald-500"
-                                />
-                            </div>
-
-                            {/* Live Terminal */}
-                            <motion.div 
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
-                                className="relative"
-                            >
-                                <div className="absolute -inset-0.5 bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-2xl blur" />
-                                <div className="relative bg-gray-900 rounded-2xl p-6 font-mono text-sm border border-white/5">
-                                    <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/10">
-                                        <div className="w-3 h-3 rounded-full bg-red-500" />
-                                        <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                                        <div className="w-3 h-3 rounded-full bg-green-500" />
-                                        <span className="ml-4 text-gray-500 text-xs">Terminal</span>
-                                    </div>
-                                    <div className="space-y-2 max-h-48 overflow-y-auto text-green-400">
-                                        <TerminalLine text={`> Test Run #${id} initialized...`} delay={0} />
-                                        {status !== 'PENDING' && <TerminalLine text="> Connecting to AI Engine..." delay={0.5} />}
-                                        {status === 'RUNNING' && <TerminalLine text="> GPT-4 analyzing target..." delay={1} />}
-                                        {status === 'RUNNING' && logs.map((log, idx) => (
-                                            <TerminalLine key={idx} text={log} delay={1.5 + idx * 0.3} />
-                                        ))}
-                                        {status === 'PASSED' && <TerminalLine text="✓ Test execution completed successfully" delay={2} />}
-                                        {status === 'FAILED' && <TerminalLine text="✗ Test execution failed" delay={2} className="text-red-400" />}
-                                        {['PASSED', 'FAILED'].includes(status) && <TerminalLine text="> Generating report..." delay={2.5} />}
-                                    </div>
-                                </div>
-                            </motion.div>
-
-                            {/* Status Messages */}
-                            {status === 'PASSED' && (
-                                <motion.div 
-                                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    className="mt-8"
-                                >
-                                    <div className="relative group">
-                                        <div className="absolute -inset-0.5 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl blur opacity-50" />
-                                        <div className="relative bg-green-500/10 border border-green-500/30 rounded-2xl p-6 text-center">
-                                            <CheckCircle className="mx-auto mb-3 text-green-400" size={32} />
-                                            <p className="text-green-100 text-lg font-semibold">Test Completed Successfully</p>
-                                            <p className="text-green-400/70 text-sm mt-2">Report available via API Gateway</p>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
-                            
-                            {status === 'FAILED' && (
-                                <motion.div 
-                                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    className="mt-8"
-                                >
-                                    <div className="relative group">
-                                        <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-rose-600 rounded-2xl blur opacity-50" />
-                                        <div className="relative bg-red-500/10 border border-red-500/30 rounded-2xl p-6 text-center">
-                                            <p className="text-red-100 text-lg font-semibold">Test Failed</p>
-                                            <p className="text-red-400/70 text-sm mt-2">Review logs for details</p>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
+                <div className="flex items-center gap-6">
+                    <div className="flex flex-col items-end">
+                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Status Protocol</span>
+                        <div className="flex items-center gap-3 px-4 py-1.5 bg-white/[0.03] border border-white/[0.05] rounded-full">
+                            <div className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: theme.color }} />
+                            <span className="text-xs font-black uppercase tracking-widest" style={{ color: theme.color }}>{status}</span>
                         </div>
                     </div>
-                </motion.div>
-            </div>
+                </div>
+            </header>
+
+            {/* Main Diagnostics Container */}
+            <main className="pt-40 px-12 pb-24 grid grid-cols-1 xl:grid-cols-3 gap-12 max-w-[1900px] mx-auto h-screen">
+                
+                {/* Visual Pipeline (Lef/Center Column) */}
+                <div className="xl:col-span-2 space-y-12 overflow-y-auto custom-scrollbar pr-4">
+                    <div className="relative bg-[#0f172a]/20 backdrop-blur-3xl border border-white/[0.03] rounded-[3rem] p-16 overflow-hidden">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05),transparent_70%)]" />
+                        
+                        {/* Process Flow */}
+                        <div className="relative flex flex-col md:flex-row items-center justify-between gap-12 z-10">
+                            <PipelineNode 
+                                icon={Globe} 
+                                label="Initialization" 
+                                isActive={true} 
+                                color="#8ce7ff" 
+                                status="Complete"
+                            />
+                            <ConnectingPulse active={true} />
+                            <PipelineNode 
+                                icon={Dna} 
+                                label="Neural Mapping" 
+                                isActive={true} 
+                                color="#ac8aff" 
+                                status="Processing"
+                            />
+                            <ConnectingPulse active={true} />
+                            <PipelineNode 
+                                icon={Activity} 
+                                label="Flow Execution" 
+                                isActive={false} 
+                                color="#a3a6ff" 
+                                status="Queued"
+                            />
+                            <ConnectingPulse active={false} />
+                            <PipelineNode 
+                                icon={CheckCircle} 
+                                label="Synthesis" 
+                                isActive={false} 
+                                color="#10b981" 
+                                status="Hold"
+                            />
+                        </div>
+
+                        {/* Telemetry Stats */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24 pt-16 border-t border-white/[0.03]">
+                            {[
+                                { label: 'CPU Cluster Load', value: '42.8%', icon: Cpu },
+                                { label: 'Active Simulations', value: '512 / 1k', icon: Sparkles },
+                                { label: 'Memory Reserved', value: '1,248 MB', icon: Zap },
+                                { label: 'Neural Accuracy', value: '99.99%', icon: BrainCircuit },
+                            ].map((stat, i) => (
+                                <div key={i}>
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <stat.icon size={14} className="text-slate-600" />
+                                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{stat.label}</span>
+                                    </div>
+                                    <div className="text-2xl font-black text-white tracking-tighter">{stat.value}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="bg-indigo-600/5 border border-indigo-500/10 rounded-[2.5rem] p-10 group hover:border-indigo-500/30 transition-all">
+                             <div className="flex items-center justify-between mb-8">
+                                <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Heuristic Correction</h3>
+                                <Zap className="text-indigo-500" size={18} fill="currentColor" />
+                             </div>
+                             <p className="text-sm text-slate-400 font-medium italic leading-relaxed">
+                                AI has autonomously detected 4 breaking changes in DOM structure. Synthesis of healing selectors initiated.
+                             </p>
+                        </div>
+                        <div className="bg-emerald-600/5 border border-emerald-500/10 rounded-[2.5rem] p-10 group hover:border-emerald-500/30 transition-all">
+                            <div className="flex items-center justify-between mb-8">
+                                <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Security Integrity</h3>
+                                <ShieldIcon className="text-emerald-500" size={18} fill="currentColor" />
+                             </div>
+                             <p className="text-sm text-slate-400 font-medium italic leading-relaxed">
+                                All simulation nodes are verified within the secure cloud perimeter. Zero breach vectors detected.
+                             </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Terminal Console (Right Column) */}
+                <div className="flex flex-col h-full overflow-hidden pb-12">
+                    <div className="flex-1 bg-[#020617] border border-white/[0.04] rounded-[2.5rem] flex flex-col overflow-hidden shadow-3xl">
+                        {/* Terminal Header */}
+                        <div className="px-8 py-6 bg-white/[0.02] border-b border-white/[0.04] flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <TerminalIcon size={16} className="text-indigo-500" />
+                                <span className="text-[10px] font-black text-white uppercase tracking-widest">Neural Stream</span>
+                            </div>
+                            <div className="flex gap-1.5">
+                                <div className="w-2.5 h-2.5 rounded-full bg-white/5" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-white/5" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-white/5" />
+                            </div>
+                        </div>
+                        
+                        {/* Console Logs */}
+                        <div className="flex-1 p-8 overflow-y-auto custom-scrollbar font-mono text-xs space-y-3">
+                            <AnimatePresence>
+                                {logs.map((log, i) => (
+                                    <motion.div 
+                                        key={i}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        className="flex items-start gap-4 text-slate-500"
+                                    >
+                                        <span className="opacity-20 select-none">[{i.toString().padStart(3, '0')}]</span>
+                                        <span className={i === logs.length - 1 ? 'text-indigo-400 font-bold' : ''}>
+                                            <span className="text-indigo-800">{'>>>'}</span> {log}
+                                        </span>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                            <motion.div 
+                                animate={{ opacity: [1, 0] }}
+                                transition={{ repeat: Infinity, duration: 0.8 }}
+                                className="w-2 h-4 bg-indigo-500 inline-block align-middle ml-2"
+                            />
+                        </div>
+
+                        {/* Console Controls */}
+                        <div className="p-6 bg-white/[0.01] border-t border-white/[0.03] space-y-4">
+                            <div className="flex items-center gap-4">
+                                <Search size={14} className="text-slate-600" />
+                                <input 
+                                    type="text" 
+                                    placeholder="Filter neural feed..." 
+                                    className="bg-transparent border-none text-[10px] text-slate-400 placeholder-slate-700 focus:outline-none w-full font-mono"
+                                />
+                            </div>
+                            <button className="w-full py-4 bg-white text-[#020617] rounded-xl font-black text-[10px] uppercase tracking-widest shadow-2xl transition-all hover:scale-[1.02]">
+                                Intervene Process
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     );
 }
 
-// Status Badge Component
-const StatusBadge = ({ status }) => {
-    const getConfig = () => {
-        if (status === 'PASSED') return { gradient: 'from-green-500 to-emerald-600', icon: CheckCircle };
-        if (status === 'FAILED') return { gradient: 'from-red-500 to-rose-600', icon: CheckCircle };
-        if (status === 'RUNNING') return { gradient: 'from-blue-500 to-purple-600', icon: Sparkles };
-        return { gradient: 'from-gray-500 to-gray-600', icon: Zap };
-    };
-    
-    const config = getConfig();
-    const Icon = config.icon;
-    
-    return (
-        <motion.div 
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10"
-            animate={status === 'RUNNING' ? { scale: [1, 1.05, 1] } : {}}
-            transition={{ duration: 2, repeat: Infinity }}
-        >
-            <Icon size={16} className={`bg-gradient-to-r ${config.gradient} bg-clip-text text-transparent`} />
-            <span className={`font-bold text-sm bg-gradient-to-r ${config.gradient} bg-clip-text text-transparent`}>
-                {status}
-            </span>
-        </motion.div>
-    );
-};
-
-// Pipeline Node Component
-const PipelineNode = ({ icon: Icon, label, isActive, gradient }) => (
-    <motion.div 
-        className="flex flex-col items-center gap-3"
-        animate={isActive ? { scale: [1, 1.1, 1] } : { scale: 1 }}
-        transition={{ duration: 2, repeat: isActive ? Infinity : 0 }}
-    >
+const PipelineNode = ({ icon: Icon, label, isActive, color, status }) => (
+    <div className="flex flex-col items-center gap-6 group">
         <div className="relative">
             {isActive && (
                 <motion.div 
-                    className={`absolute -inset-4 bg-gradient-to-r ${gradient} rounded-3xl blur-xl opacity-50`}
-                    animate={{ opacity: [0.3, 0.6, 0.3] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    className="absolute -inset-10 rounded-full blur-3xl opacity-20"
+                    style={{ backgroundColor: color }}
+                    animate={{ opacity: [0.1, 0.4, 0.1], scale: [0.8, 1.4, 0.8] }}
+                    transition={{ duration: 4, repeat: Infinity }}
                 />
             )}
             <motion.div 
-                className={`relative w-20 h-20 rounded-2xl flex items-center justify-center border-2 ${
+                className={`relative w-32 h-32 rounded-[2.5rem] flex items-center justify-center border transition-all duration-700 ${
                     isActive 
-                        ? `bg-gradient-to-r ${gradient} border-transparent shadow-lg` 
-                        : 'bg-white/5 border-white/10'
+                        ? 'bg-[#0f172a]/40 border-white/[0.1] shadow-2xl' 
+                        : 'bg-transparent border-white/[0.03]'
                 }`}
-                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileHover={{ y: -8, transition: { duration: 0.3 } }}
             >
-                <Icon size={32} className={isActive ? 'text-white' : 'text-gray-600'} />
+                <Icon size={44} className={isActive ? '' : 'opacity-10'} style={{ color: isActive ? color : 'white' }} />
+                <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-xl bg-[#020617] border border-white/5 flex items-center justify-center">
+                     <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]' : 'bg-slate-800'}`} />
+                </div>
             </motion.div>
         </div>
-        <span className={`font-semibold text-sm ${isActive ? 'text-white' : 'text-gray-600'}`}>
-            {label}
-        </span>
-    </motion.div>
+        <div className="text-center">
+            <div className={`text-[11px] font-black uppercase tracking-widest transition-all duration-500 mb-1 ${isActive ? 'text-white' : 'text-slate-700'}`}>
+                {label}
+            </div>
+            <div className="text-[9px] font-bold text-slate-500 opacity-40 uppercase tracking-widest">{status}</div>
+        </div>
+    </div>
 );
 
-// Connecting Pulse Component
 const ConnectingPulse = ({ active }) => (
-    <div className="w-16 md:w-32 h-1 bg-white/10 rounded-full overflow-hidden relative">
+    <div className="hidden md:block flex-1 h-[2px] bg-white/[0.04] relative mx-4 rounded-full">
         {active && (
-            <>
-                <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600"
-                    animate={{ x: ['-100%', '200%'] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                />
-                <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent"
-                    animate={{ x: ['-100%', '200%'] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear", delay: 0.3 }}
-                />
-            </>
+            <motion.div 
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent shadow-[0_0_15px_rgba(99,102,241,0.6)]"
+                animate={{ x: ['-100%', '100%'] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            />
         )}
     </div>
 );
 
-// Terminal Line Component
-const TerminalLine = ({ text, delay, className = "" }) => (
-    <motion.div
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay, duration: 0.3 }}
-        className={className || "text-green-400"}
-    >
-        {text}
-    </motion.div>
+const ShieldIcon = ({ size, className }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+    </svg>
 );

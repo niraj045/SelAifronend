@@ -3,18 +3,106 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --primary: #a3a6ff;
+  --primary-dim: #6063ee;
+  --secondary: #ac8aff;
+  --tertiary: #8ce7ff;
+  --background: #020617;
+  --surface: #0f172a;
+  --surface-high: #1e293b;
+  --on-surface: #f1f5f9;
+  --on-surface-variant: #94a3b8;
+  --error: #fb7185;
+  
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color-scheme: light dark;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
+}
+
+/* --- Enterprise AI Aesthetics --- */
+::selection {
+    background-color: rgba(99, 102, 241, 0.3);
+    color: #fff;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(99, 102, 241, 0.3);
 }
 
 body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
+    background-color: var(--background);
+    color: var(--on-surface);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    margin: 0;
+}
+
+/* Base Grain Overlay */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    opacity: 0.02;
+    mask-image: radial-gradient(circle at center, black, transparent);
+    pointer-events: none;
+    z-index: 9999;
+}
+
+#root {
+    height: 100vh;
+}
+
+/* Global Grid Effect */
+.bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at center, black, transparent 90%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-slate-200 antialiased;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] shadow-2xl;
+  }
+  
+  .glass-morphism {
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .premium-gradient {
+    @apply bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500;
+  }
 }

@@ -1,169 +1,155 @@
 import { motion } from 'framer-motion';
-import { Brain, TrendingUp, AlertTriangle, CheckCircle, Zap } from 'lucide-react';
+import { Brain, TrendingUp, AlertTriangle, CheckCircle, Zap, Cpu, Scan, Activity, ArrowUpRight, BarChart3, Fingerprint, Shield } from 'lucide-react';
 
 const AIInsights = () => {
     const insights = [
         {
             type: 'optimization',
-            title: 'Detected 3 redundant test flows',
-            description: 'Login and authentication steps are duplicated across multiple tests. Consider extracting to a reusable component.',
-            impact: 'High',
-            savings: '~30% faster execution'
+            title: 'Neural Redundancy Detected',
+            description: 'Authentication cycles in Node-8 clusters are exhibiting 32% redundant verification paths. Protocol distillation recommended to bypass overhead.',
+            impact: 'Significant',
+            metric: '+310ms latency gain',
+            status: 'Processing'
         },
         {
             type: 'selector',
-            title: 'Unstable selector detected',
-            description: 'The selector "#btn-submit-123" contains dynamic IDs which may cause flakiness. AI suggests using data-testid instead.',
+            title: 'Temporal Anchor Instability',
+            description: 'The DOM sector "#workflow-matrix" relies on dynamic temporal hashes. Heuristics suggest a transition to stable property observers.',
             impact: 'Critical',
-            affectedTests: 12
+            nodes: 14,
+            status: 'At Risk'
         },
         {
             type: 'coverage',
-            title: 'Missing test coverage',
-            description: 'Payment flow only covers happy path. AI recommends adding edge cases for invalid card numbers and expired cards.',
-            impact: 'Medium',
-            confidence: '87%'
+            title: 'Parity Breach Warning',
+            description: 'Logic shards for "Payment Flow V2" have drifted 4% from the production baseline. Auto-synthesis of new test vectors in progress.',
+            impact: 'Moderate',
+            confidence: '98.2%',
+            status: 'Steady'
         },
-        {
-            type: 'performance',
-            title: 'Slow page load detected',
-            description: 'Dashboard page takes 4.2s to load. AI identified 3 unoptimized images and excessive JS bundles.',
-            impact: 'High',
-            improvement: 'Up to 2.5s faster'
-        }
     ];
 
-    const getIcon = (type) => {
-        switch(type) {
-            case 'optimization': return <Zap className="text-yellow-400" size={20} />;
-            case 'selector': return <AlertTriangle className="text-red-400" size={20} />;
-            case 'coverage': return <TrendingUp className="text-blue-400" size={20} />;
-            case 'performance': return <Brain className="text-purple-400" size={20} />;
-            default: return <CheckCircle className="text-green-400" size={20} />;
-        }
-    };
-
-    const getImpactColor = (impact) => {
+    const getImpactStyle = (impact) => {
         switch(impact) {
-            case 'Critical': return 'bg-red-500/20 text-red-400 border-red-500/30';
-            case 'High': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-            case 'Medium': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-            default: return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+            case 'Critical': return 'text-rose-400 bg-rose-500/10 border-rose-500/20';
+            case 'Significant': return 'text-amber-400 bg-amber-500/10 border-amber-500/20';
+            default: return 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20';
         }
     };
 
     return (
-        <div className="space-y-6">
-            {/* Page Header */}
-            <div className="flex items-center justify-between">
-                <div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <h1 className="text-3xl font-bold text-white">AI Insights</h1>
-                        <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-semibold rounded-full">
-                            NEW
-                        </span>
+        <div className="p-8 md:p-12 lg:p-16 max-w-[1700px] mx-auto space-y-16">
+            {/* Header */}
+            <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
+                <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
+                    <div className="flex items-center gap-3 mb-4">
+                        <Fingerprint className="text-indigo-500" size={20} />
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Heuristic Reconnaissance</span>
                     </div>
-                    <p className="text-gray-400">Smart recommendations powered by machine learning</p>
-                </div>
-                <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg font-semibold flex items-center gap-2 hover:bg-white/10"
+                    <h1 className="text-5xl md:text-6xl font-black text-white tracking-tighter uppercase italic leading-tight">
+                        Synthesis <span className="text-indigo-500">Intelligence.</span>
+                    </h1>
+                </motion.div>
+                
+                <motion.button 
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    className="px-10 py-5 bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl transition-all hover:bg-indigo-600 hover:text-white"
                 >
-                    <Brain size={18} /> Refresh Analysis
+                    Initialize Global Audit
                 </motion.button>
-            </div>
+            </header>
 
-            {/* Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Metrics Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                 {[
-                    { label: 'Insights Generated', value: '47', icon: '🧠', gradient: 'from-purple-500 to-pink-500' },
-                    { label: 'Issues Detected', value: '12', icon: '⚠️', gradient: 'from-orange-500 to-red-500' },
-                    { label: 'Optimizations', value: '8', icon: '⚡', gradient: 'from-yellow-500 to-orange-500' },
-                    { label: 'AI Confidence', value: '92%', icon: '✨', gradient: 'from-blue-500 to-purple-500' },
-                ].map((stat, idx) => (
+                    { label: 'Neural Precision', value: '99.9%', trend: '+0.1%', icon: Activity, color: 'text-emerald-400' },
+                    { label: 'Protocol Drift', value: '0.04%', trend: '-0.2%', icon: Scan, color: 'text-indigo-400' },
+                    { label: 'Auto-Healing', value: '1,244', trend: 'Active', icon: Cpu, color: 'text-purple-400' },
+                    { label: 'Security Breaches', value: '00', trend: 'Optimal', icon: Shield, color: 'text-slate-500' },
+                ].map((m, i) => (
                     <motion.div
-                        key={idx}
+                        key={i}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="relative group"
+                        transition={{ delay: i * 0.1 }}
+                        className="p-10 bg-white/[0.02] border border-white/[0.04] rounded-[2.5rem] relative overflow-hidden group hover:border-white/10 transition-all"
                     >
-                        <div className={`absolute -inset-0.5 bg-gradient-to-r ${stat.gradient} rounded-xl blur opacity-30 group-hover:opacity-50 transition`} />
-                        <div className="relative bg-black/80 backdrop-blur-xl border border-white/10 rounded-xl p-6">
-                            <div className="text-3xl mb-2">{stat.icon}</div>
-                            <div className="text-2xl font-bold text-white">{stat.value}</div>
-                            <div className="text-sm text-gray-400">{stat.label}</div>
+                        <div className={`p-4 rounded-2xl bg-white/[0.03] border border-white/[0.05] ${m.color} mb-8 w-fit group-hover:scale-110 transition-transform`}>
+                            <m.icon size={20} />
                         </div>
+                        <div className="text-4xl font-black text-white tracking-tighter mb-1">{m.value}</div>
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">{m.label}</div>
                     </motion.div>
                 ))}
             </div>
 
-            {/* AI Insights List */}
-            <div className="space-y-4">
+            {/* Detailed Insights Feed */}
+            <div className="space-y-6">
                 {insights.map((insight, idx) => (
                     <motion.div
                         key={idx}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="group bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 hover:border-purple-500/50 transition-all"
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.5 + (idx * 0.1) }}
+                        className="bg-[#0f172a]/20 backdrop-blur-3xl border border-white/[0.03] rounded-[3rem] p-12 hover:border-indigo-500/20 transition-all group relative overflow-hidden"
                     >
-                        <div className="flex items-start gap-4">
-                            <div className="p-3 bg-white/5 rounded-lg">
-                                {getIcon(insight.type)}
-                            </div>
-                            
-                            <div className="flex-1 space-y-3">
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <h3 className="font-semibold text-white text-lg">{insight.title}</h3>
-                                        <p className="text-gray-400 mt-1">{insight.description}</p>
-                                    </div>
-                                    <span className={`px-3 py-1 rounded-full text-xs border ${getImpactColor(insight.impact)}`}>
-                                        {insight.impact} Impact
-                                    </span>
+                        <div className="flex flex-col lg:flex-row gap-12">
+                            <div className="lg:w-1/3 space-y-8">
+                                <div className={`inline-flex items-center gap-3 px-5 py-2 rounded-full border text-[10px] font-black uppercase tracking-widest ${getImpactStyle(insight.impact)}`}>
+                                    {insight.impact} Reach
                                 </div>
+                                <h3 className="text-3xl font-black text-white tracking-tighter uppercase leading-tight">{insight.title}</h3>
+                                <div className="p-6 bg-white/[0.02] border border-white/[0.05] rounded-3xl">
+                                     <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Neural Confidence Map</div>
+                                     <div className="h-24 w-full flex items-end gap-1 px-2">
+                                         {[40, 70, 45, 90, 65, 80, 55, 95].map((h, i) => (
+                                             <motion.div 
+                                                 key={i} 
+                                                 initial={{ height: 0 }}
+                                                 animate={{ height: `${h}%` }}
+                                                 transition={{ delay: 1 + i * 0.1, duration: 1 }}
+                                                 className="flex-1 bg-indigo-500/20 rounded-t-sm group-hover:bg-indigo-500/40 transition-colors" 
+                                             />
+                                         ))}
+                                     </div>
+                                </div>
+                            </div>
 
-                                <div className="flex items-center gap-6 text-sm">
-                                    {insight.savings && (
-                                        <div className="flex items-center gap-2 text-green-400">
-                                            <TrendingUp size={16} />
-                                            {insight.savings}
+                            <div className="lg:w-2/3 space-y-10">
+                                <p className="text-lg text-slate-400 font-medium italic leading-relaxed">"{insight.description}"</p>
+                                
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-10 border-t border-white/5 pt-10">
+                                    {insight.metric && (
+                                        <div className="space-y-1">
+                                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Efficiency Delta</div>
+                                            <div className="text-xl font-black text-emerald-400 tracking-tight">{insight.metric}</div>
                                         </div>
                                     )}
-                                    {insight.affectedTests && (
-                                        <div className="text-gray-400">
-                                            Affects {insight.affectedTests} tests
+                                    {insight.nodes && (
+                                        <div className="space-y-1">
+                                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Compromised Nodes</div>
+                                            <div className="text-xl font-black text-rose-400 tracking-tight">{insight.nodes} SHARDS</div>
                                         </div>
                                     )}
                                     {insight.confidence && (
-                                        <div className="text-gray-400">
-                                            Confidence: {insight.confidence}
+                                        <div className="space-y-1">
+                                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Synthesis Rating</div>
+                                            <div className="text-xl font-black text-indigo-400 tracking-tight">{insight.confidence}</div>
                                         </div>
                                     )}
-                                    {insight.improvement && (
-                                        <div className="text-blue-400">
-                                            {insight.improvement}
-                                        </div>
-                                    )}
+                                    <div className="space-y-1">
+                                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Cycle State</div>
+                                        <div className="text-xl font-black text-white tracking-tight">{insight.status}</div>
+                                    </div>
                                 </div>
 
-                                <div className="flex gap-2">
-                                    <motion.button
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-medium text-sm"
-                                    >
-                                        Apply Suggestion
-                                    </motion.button>
-                                    <motion.button
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        className="px-4 py-2 bg-white/5 border border-white/10 text-white rounded-lg font-medium text-sm hover:bg-white/10"
-                                    >
-                                        View Details
-                                    </motion.button>
+                                <div className="flex gap-4">
+                                    <button className="flex-1 px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 transition-all">
+                                        Authorize Synthesis
+                                    </button>
+                                    <button className="px-8 py-4 bg-white/[0.02] border border-white/[0.05] text-slate-300 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/[0.08] transition-all">
+                                        Inspect Source
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -173,5 +159,6 @@ const AIInsights = () => {
         </div>
     );
 };
+
 
 export default AIInsights;
